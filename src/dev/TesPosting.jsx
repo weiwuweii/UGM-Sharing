@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createItem } from './lib/api/items'
+import { createItem } from '../lib/api/items'
 
 export default function TesPosting() {
   const [f, setF] = useState({
