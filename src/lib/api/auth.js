@@ -58,3 +58,14 @@ function terjemahkanError(pesan) {
   if (pesan.includes('Database error')) return 'Gunakan email UGM (@mail.ugm.ac.id atau @ugm.ac.id)'
   return pesan
 }
+
+export async function getMyProfile() {
+  const { data, error } = await supabase.rpc('get_my_profile')
+  if (error) {
+    return {
+      data: null,
+      error: error.message.includes('permission denied') ? 'Silakan login dulu' : error.message,
+    }
+  }
+  return { data: data?.[0] ?? null, error: null }
+}
