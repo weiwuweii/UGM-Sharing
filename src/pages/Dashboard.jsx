@@ -252,7 +252,7 @@ function MyItems({ items, busyId, onToggle }) {
   return (
     <ul className="grid gap-3 md:grid-cols-2">
       {items.map((item) => {
-        const buddy = buddyForCategory(item.category)
+        const buddy = buddyForCategory(`${item.category ?? ''} ${item.title ?? ''}`)
         const bisaPinjam = item.listing_type !== 'jual'
         const canToggle = item.status === 'tersedia' || item.status === 'nonaktif'
         return (

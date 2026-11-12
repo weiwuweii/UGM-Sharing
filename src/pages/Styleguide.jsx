@@ -94,7 +94,7 @@ export default function Styleguide() {
             </div>
           ))}
         </div>
-        <p className="text-sm text-ink-2">Pakai <code>buddyForCategory(item.category)</code> untuk memilih maskot dari kategori barang. Pupil diam kalau pengguna mengaktifkan reduced motion.</p>
+        <p className="text-sm text-ink-2">Pakai <code>{"buddyForCategory(`${item.category} ${item.title}`)"}</code> untuk memilih maskot dari kategori dan judul barang. Pupil diam kalau pengguna mengaktifkan reduced motion.</p>
       </Section>
 
       <Section title="Tombol">

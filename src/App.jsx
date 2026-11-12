@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import AppShell from './components/layout/AppShell'
 import Dashboard from './pages/Dashboard'
+import Katalog from './pages/Katalog'
 import Placeholder, { NotFound } from './pages/Placeholder'
 import Styleguide from './pages/Styleguide'
 import BackendTest from './dev/BackendTest'
@@ -12,7 +13,7 @@ export default function App() {
     <Routes>
       <Route element={<AppShell />}>
         <Route index element={<Placeholder title="Beranda" owner="C" buddy="kamera" />} />
-        <Route path="katalog" element={<Placeholder title="Katalog" owner="C" buddy="kalkulator" />} />
+        <Route path="katalog" element={<Katalog />} />
         <Route path="barang/:id" element={<Placeholder title="Detail Barang" owner="C" buddy="kalkulator" />} />
         <Route path="pasang" element={<Placeholder title="Pasang Barang" owner="D" buddy="charger" />} />
         <Route path="masuk" element={<Placeholder title="Masuk / Daftar" owner="D" />} />
