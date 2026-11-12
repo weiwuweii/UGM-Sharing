@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Buddy from '../buddy/Buddy'
 import { BUDDY_TINT, buddyForCategory } from '../buddy/buddyMap'
@@ -7,10 +8,11 @@ import { rupiah } from '../../lib/format'
 
 // Kartu barang untuk Beranda, Katalog, dan Profil. Sesuai komponen Item Card di Figma.
 // `item` mengikuti bentuk item dari getItems() di API_CONTRACT.md.
-// Kalau barang belum punya foto, kartu menampilkan maskot sesuai kategori.
+// Kalau barang belum punya foto atau fotonya gagal dimuat, kartu menampilkan maskot sesuai kategori.
 export default function ItemCard({ item, saved = false, onToggleSaved }) {
-  const buddy = buddyForCategory(item.category)
-  const photo = item.photos?.[0]
+  const buddy = buddyForCategory(`${item.category ?? ''} ${item.title ?? ''}`)
+  const [photoFailed, setPhotoFailed] = useState(false)
+  const photo = photoFailed ? null : item.photos?.[0]
   const bisaPinjam = item.listing_type !== 'jual'
   const harga = bisaPinjam ? item.rent_price_per_day : item.sale_price
   const unit = bisaPinjam ? '/hari' : 'beli'
@@ -19,7 +21,7 @@ export default function ItemCard({ item, saved = false, onToggleSaved }) {
     <article className="group relative flex min-w-0 flex-col overflow-hidden rounded-card bg-surface shadow-card transition hover:-translate-y-0.5 hover:shadow-float">
       <div className={`relative flex aspect-[4/3] items-center justify-center ${BUDDY_TINT[buddy]}`}>
         {photo ? (
-          <img src={photo} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" />
+          <img src={photo} alt="" loading="lazy" onError={() => setPhotoFailed(true)} className="absolute inset-0 size-full object-cover" />
         ) : (
           <Buddy type={buddy} size={88} className="transition group-hover:scale-105" />
         )}

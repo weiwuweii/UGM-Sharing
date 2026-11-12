@@ -11,7 +11,8 @@ export const BUDDY_TINT = {
   violet: 'bg-tint-violet',
 }
 
-// Kategori bebas teks dari database dipetakan ke maskot
+// Kategori (dan boleh ditambah judul barang) dipetakan ke maskot.
+// Contoh: buddyForCategory(`${item.category} ${item.title}`)
 export function buddyForCategory(category = '') {
   const c = String(category ?? '').toLowerCase()
   if (c.includes('kalkulator')) return 'kalkulator'
