@@ -6,7 +6,7 @@ Karya Kompetisi Web Design COMMIT 2026 · Tema: Optimasi Keuangan dan Gaya Hidup
 
 ## Tim
 
-**Nama tim:** `[isi nama tim]`
+**Nama tim:** WC (Toilet) Keren
 
 | Anggota | Peran |
 | --- | --- |
