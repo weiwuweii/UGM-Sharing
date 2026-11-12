@@ -48,7 +48,7 @@ Kebutuhan: Node.js 20 atau lebih baru dan sebuah project Supabase.
    npm install
    ```
 2. Siapkan database. Di Supabase SQL Editor, jalankan berurutan:
-   `supabase/01_schema.sql`, `supabase/02_policies_and_storage.sql`, `supabase/03_functions.sql`, `supabase/04_rls_policies.sql`.
+   `supabase/01_schema.sql`, `supabase/02_policies_and_storage.sql`, `supabase/03_functions.sql`, `supabase/04_rls_policies.sql`, `supabase/05_perbaikan_keamanan.sql`.
 3. Salin contoh konfigurasi, lalu isi URL dan anon key dari Supabase (Project Settings, API):
    ```bash
    cp .env.example .env
@@ -78,7 +78,9 @@ Folder `supabase/`:
   - `create_booking`: validasi login, mencegah meminjam barang sendiri, cek bentrok tanggal, dan menghitung `saved_amount` untuk Kalkulator Hemat.
   - `update_booking_status`: alur status `pending` ke `disetujui`, `ditolak`, atau `dibatalkan`, lalu `selesai`, sesuai hak pemilik dan peminjam.
   - `get_contact`: membuka nomor WhatsApp hanya setelah booking disetujui, dan hanya untuk pihak terkait.
+  - Trigger di `auth.users`: menolak email non-UGM dan membuat profil otomatis saat daftar.
 - `04_rls_policies.sql`: Row Level Security di semua tabel.
+- `05_perbaikan_keamanan.sql`: nomor WhatsApp hanya bisa diambil lewat `get_contact`, ulasan hanya lewat `create_review` setelah transaksi selesai, serta fungsi `get_stats` dan `get_public_profile`.
 - `tools/ekspor_dari_supabase.sql`: query baca-saja untuk menyalin fungsi dan policy dari project Supabase ke file di atas.
 
 ## Penggunaan AI, template, dan aset pihak ketiga
