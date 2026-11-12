@@ -102,8 +102,8 @@ export default function Dashboard() {
         </div>
         {(state.status === 'loading' || state.status === 'ready') && (
           <div className="mt-5 grid grid-cols-2 gap-3 md:max-w-xl">
-            <Stat tone="lime" label="Total hemat" value={d ? rupiahRingkas(d.total_saved) : null} hint="dari meminjam" />
-            <Stat tone="white" label="Pemasukan" value={d ? rupiahRingkas(d.total_income) : null} hint="dari barangmu" />
+            <Stat tone="lime" label="Total hemat" value={d ? rupiahRingkas(d.total_saved) : null} hint="dibanding beli baru" />
+            <Stat tone="white" label="Pemasukan" value={d ? rupiahRingkas(d.total_income) : null} hint="dari transaksi selesai" />
           </div>
         )}
       </section>
@@ -231,7 +231,7 @@ function TabContent({ tab, data, busyId, onStatus, onReview, onToggleItem }) {
         <BookingCard
           key={b.id}
           booking={b}
-          role={tab === 'masuk' ? 'owner' : tab === 'saya' ? 'borrower' : b.borrower ? 'owner' : 'borrower'}
+          role={tab === 'masuk' ? 'owner' : tab === 'saya' ? 'borrower' : b.role === 'pemilik' ? 'owner' : 'borrower'}
           busy={busyId === b.id}
           onStatus={onStatus}
           onReview={onReview}
