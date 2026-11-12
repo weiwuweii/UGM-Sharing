@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { getItems } from './lib/api/items'
-import { createBooking } from './lib/api/bookings'
+import { getItems } from '../lib/api/items'
+import { createBooking } from '../lib/api/bookings'
 
 export default function TesBooking() {
   const [items, setItems] = useState([])
