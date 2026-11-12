@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { getItems } from './lib/api/items'
 import { signUp, signIn, signOut, getCurrentUser } from './lib/api/auth'
+import TesPosting from './TesPosting'
+import TesBooking from './TesBooking'
 
 function App() {
   const [items, setItems] = useState([])
@@ -49,6 +51,9 @@ function App() {
         </div>
         {pesan && <p className="text-sm">{pesan}</p>}
       </div>
+
+      <TesPosting />
+      <TesBooking />
 
       <ul className="space-y-2">
         {items.map((i) => (
