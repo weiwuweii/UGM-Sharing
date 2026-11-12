@@ -1,0 +1,7 @@
+-- 04. Row Level Security untuk tabel public.
+--
+-- BELUM DIISI. Policy RLS tabel (profiles, items, bookings, reviews, wishlists, reports)
+-- sudah aktif di project Supabase, tapi belum disalin ke repo.
+--
+-- Cara mengisi: jalankan supabase/tools/ekspor_dari_supabase.sql di SQL Editor,
+-- salin hasil kolom "rls" ke file ini, lalu commit.

@@ -70,4 +70,4 @@ id, type, start_date, end_date, note, status, saved_amount, created_at, item: { 
 
 ## Pakai mock dulu
 
-Sebelum backend asli jadi, buat fungsi tiruan dengan nama dan bentuk yang sama persis. Saat yang asli sudah ada, hanya satu baris di `src/lib/api/index.js` yang diganti.
+Sebelum backend asli jadi, buat fungsi tiruan dengan nama dan bentuk yang sama persis. Semua fungsi juga bisa diimpor sekaligus dari `src/lib/api` (lihat `src/lib/api/index.js`). Untuk memakai mock, ganti baris export yang bersangkutan di file itu.
