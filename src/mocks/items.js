@@ -1,3 +1,5 @@
+// Data contoh untuk tampilan katalog sebelum tersambung ke getItems().
+// photos dikosongkan supaya kartu menampilkan maskot sesuai kategori, bukan foto acak.
 export const mockItems = [
   {
     id: '1',
@@ -10,7 +12,7 @@ export const mockItems = [
     deposit: 50000,
     condition: 'baik',
     location: 'Perpustakaan Pusat',
-    photos: ['https://picsum.photos/seed/kalkulator/400/300'],
+    photos: [],
     status: 'tersedia',
   },
   {
@@ -24,7 +26,7 @@ export const mockItems = [
     deposit: 500000,
     condition: 'seperti_baru',
     location: 'Fakultas Teknik',
-    photos: ['https://picsum.photos/seed/kamera/400/300'],
+    photos: [],
     status: 'tersedia',
   },
   {
@@ -38,7 +40,7 @@ export const mockItems = [
     deposit: 100000,
     condition: 'baik',
     location: 'Fakultas Teknik',
-    photos: ['https://picsum.photos/seed/tripod/400/300'],
+    photos: [],
     status: 'dipinjam',
   },
 ]
