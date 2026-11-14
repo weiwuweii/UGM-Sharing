@@ -33,4 +33,4 @@ Didefinisikan di `src/index.css` (`@theme`). Pakai kelasnya langsung, jangan hex
 
 ## Halaman
 
-Rute ada di `src/App.jsx`. Halaman yang masih `Placeholder` diganti pemiliknya: ganti `element={<Placeholder ... />}` dengan halaman asli. Halaman tes backend lama sekarang di `/tes-backend`.
+Rute ada di `src/App.jsx`. Halaman yang masih `Placeholder` diganti pemiliknya: ganti `element={<Placeholder ... />}` dengan halaman asli. 

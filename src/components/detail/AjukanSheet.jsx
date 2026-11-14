@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Button from '../ui/Button'
 import Field from '../ui/Field'
 import Icon from '../ui/Icon'
@@ -8,7 +8,8 @@ import { useToast } from '../ui/toast'
 import { createBooking } from '../../lib/api'
 import { jumlahHari, rupiah } from '../../lib/format'
 import { hematBeli, hitungHemat } from '../../lib/hemat'
-import KalenderTanggal, { tanggalDalamRentang } from './KalenderTanggal'
+import KalenderTanggal from './KalenderTanggal'
+import { tanggalDalamRentang } from '../../lib/tanggal'
 
 const NAMA_HARI = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
 const NAMA_BULAN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']
@@ -22,6 +23,7 @@ function hariPendek(t) {
 
 // mode: 'pinjam' (pilih tanggal) atau 'beli' (tanpa tanggal)
 export default function AjukanSheet({ open, onClose, item, mode }) {
+  const lokasi = useLocation()
   const navigate = useNavigate()
   const toast = useToast()
   const [mulai, setMulai] = useState(null)
@@ -151,7 +153,7 @@ export default function AjukanSheet({ open, onClose, item, mode }) {
         {error && (
           <div role="alert" className="flex flex-col items-start gap-2 text-sm text-danger">
             <p>{error}</p>
-            {perluLogin && <Button size="sm" variant="secondary" to="/masuk">Masuk</Button>}
+            {perluLogin && <Button size="sm" variant="secondary" to={`/masuk?next=${encodeURIComponent(lokasi.pathname)}`}>Masuk</Button>}
           </div>
         )}
       </div>

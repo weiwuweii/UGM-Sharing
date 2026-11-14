@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Buddy from '../components/buddy/Buddy'
 import ItemCard, { ItemCardSkeleton } from '../components/items/ItemCard'
@@ -48,19 +48,8 @@ function Pagination({ page, pages, onChange }) {
   )
 }
 
-export default function Katalog() {
-  const [params, setParams] = useSearchParams()
-  const [items, setItems] = useState([])
-  const [total, setTotal] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [ulang, setUlang] = useState(0)
-  const [laciBuka, setLaciBuka] = useState(false)
-  const [cari, setCari] = useState(params.get('search') || '')
-  const [min, setMin] = useState(params.get('minPrice') || '')
-  const [max, setMax] = useState(params.get('maxPrice') || '')
-
-  const filters = {
+function bacaFilter(params) {
+  return {
     search: params.get('search') || '',
     category: params.get('category') || '',
     type: params.get('type') || '',
@@ -72,6 +61,22 @@ export default function Katalog() {
     sort: params.get('sort') || 'terbaru',
     page: Number(params.get('page') || 1),
   }
+}
+
+export default function Katalog() {
+  const [params, setParams] = useSearchParams()
+  const [hasil, setHasil] = useState({ kunci: null, items: [], total: 0, error: null })
+  const [ulang, setUlang] = useState(0)
+  const [laciBuka, setLaciBuka] = useState(false)
+  const [cari, setCari] = useState(params.get('search') || '')
+  const [min, setMin] = useState(params.get('minPrice') || '')
+  const [max, setMax] = useState(params.get('maxPrice') || '')
+
+  const qs = params.toString()
+  const filters = useMemo(() => bacaFilter(new URLSearchParams(qs)), [qs])
+  const kunci = `${qs}|${ulang}`
+  const loading = hasil.kunci !== kunci
+  const { items, total, error } = hasil
   const adaFilter = [...params.keys()].some((k) => k !== 'sort' && k !== 'page')
   const adaFilterLain = [...params.keys()].some((k) => !['sort', 'page', 'search'].includes(k))
 
@@ -87,6 +92,7 @@ export default function Katalog() {
 
   // Hapus semuanya (termasuk kata kunci)
   function reset() {
+    clearTimeout(timerCari.current)
     setCari('')
     setMin('')
     setMax('')
@@ -100,27 +106,28 @@ export default function Katalog() {
     setParams(cari.trim() ? { search: cari.trim() } : {})
   }
 
+  // Pencarian dijalankan 400 ms setelah berhenti mengetik
+  const timerCari = useRef(null)
+  function ketik(nilai) {
+    setCari(nilai)
+    clearTimeout(timerCari.current)
+    timerCari.current = setTimeout(() => ubah('search', nilai.trim()), 400)
+  }
   useEffect(() => {
-    const t = setTimeout(() => {
-      if (cari.trim() !== (params.get('search') || '')) ubah('search', cari.trim())
-    }, 400)
-    return () => clearTimeout(t)
-  }, [cari])
+    const timer = timerCari
+    return () => clearTimeout(timer.current)
+  }, [])
 
   useEffect(() => {
     let batal = false
-    setLoading(true)
     getItems(filters).then((res) => {
       if (batal) return
-      setItems(res.data ?? [])
-      setTotal(res.total ?? 0)
-      setError(res.error)
-      setLoading(false)
+      setHasil({ kunci, items: res.data ?? [], total: res.total ?? 0, error: res.error })
     })
     return () => {
       batal = true
     }
-  }, [params.toString(), ulang])
+  }, [filters, kunci])
 
   const jumlahHalaman = Math.max(1, Math.ceil(total / PAGE_SIZE))
   const panel = (
@@ -150,7 +157,7 @@ export default function Katalog() {
             <input
               type="search"
               value={cari}
-              onChange={(e) => setCari(e.target.value)}
+              onChange={(e) => ketik(e.target.value)}
               placeholder="Cari barang..."
               aria-label="Cari barang"
               className="h-14 w-full rounded-full bg-surface pr-16 pl-14 text-base text-ink focus:outline-none lg:pr-5"
