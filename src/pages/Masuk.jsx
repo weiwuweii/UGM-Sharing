@@ -16,7 +16,8 @@ export default function Masuk() {
   const [params] = useSearchParams()
   const navigate = useNavigate()
   const toast = useToast()
-  const next = params.get('next')?.startsWith('/') ? params.get('next') : '/dashboard'
+  const nextParam = params.get('next') ?? ''
+  const next = nextParam.startsWith('/') && !nextParam.startsWith('//') ? nextParam : '/dashboard'
 
   const [mode, setMode] = useState(params.get('mode') === 'daftar' ? 'daftar' : 'masuk')
   const [form, setForm] = useState({ nama: '', email: '', password: '' })

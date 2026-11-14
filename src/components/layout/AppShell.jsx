@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Buddy from '../buddy/Buddy'
 import Button from '../ui/Button'
 import Icon from '../ui/Icon'
@@ -65,8 +65,11 @@ function AkunMenu() {
   const { user, loading } = useSession()
   const navigate = useNavigate()
   const toast = useToast()
+  const lokasi = useLocation()
+  // Setelah masuk, kembali ke halaman yang sedang dibuka
+  const next = lokasi.pathname === '/masuk' || lokasi.pathname === '/' ? '' : `?next=${encodeURIComponent(lokasi.pathname + lokasi.search)}`
   if (loading) return <span className="w-16" aria-hidden="true" />
-  if (!user) return <Link to="/masuk" className="text-sm font-semibold text-navy-700 hover:underline">Masuk</Link>
+  if (!user) return <Link to={`/masuk${next}`} className="text-sm font-semibold text-navy-700 hover:underline">Masuk</Link>
 
   async function keluar() {
     await signOut()

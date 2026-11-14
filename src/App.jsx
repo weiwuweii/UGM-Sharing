@@ -4,11 +4,12 @@ import CaraKerja from './pages/CaraKerja'
 import Dashboard from './pages/Dashboard'
 import Katalog from './pages/Katalog'
 import DetailBarang from './pages/DetailBarang'
-import Placeholder, { NotFound } from './pages/Placeholder'
+import { NotFound } from './pages/Placeholder'
 import Styleguide from './pages/Styleguide'
 import Beranda from './pages/Beranda'
 import Masuk from './pages/Masuk'
 import PasangBarang from './pages/PasangBarang'
+import ProfilPublik from './pages/ProfilPublik'
 import ProfilSaya from './pages/ProfilSaya'
 import Tersimpan from './pages/Tersimpan'
 
@@ -25,7 +26,7 @@ export default function App() {
         <Route path="masuk" element={<Masuk />} />
         <Route path="profil" element={<ProfilSaya />} />
         <Route path="tersimpan" element={<Tersimpan />} />
-        <Route path="profil/:id" element={<Placeholder title="Profil Publik" />} />
+        <Route path="profil/:id" element={<ProfilPublik />} />
         <Route path="cara-kerja" element={<CaraKerja />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="styleguide" element={<Styleguide />} />

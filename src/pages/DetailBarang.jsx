@@ -92,21 +92,18 @@ function Memuat() {
 export default function DetailBarang() {
   const { id } = useParams()
   const toast = useToast()
-  const [item, setItem] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [hasil, setHasil] = useState({ id: null, item: null, error: null })
+  const loading = hasil.id !== id
+  const item = loading ? null : hasil.item
+  const error = loading ? null : hasil.error
   const [profil, setProfil] = useState(null)
   const [saved, setSaved] = useState(false)
   const [sheet, setSheet] = useState(null) // null | 'pinjam' | 'beli' | 'lapor'
 
   useEffect(() => {
     let batal = false
-    setLoading(true)
     getItem(id).then((res) => {
-      if (batal) return
-      setItem(res.data)
-      setError(res.error)
-      setLoading(false)
+      if (!batal) setHasil({ id, item: res.data, error: res.error })
     })
     return () => {
       batal = true
@@ -114,19 +111,21 @@ export default function DetailBarang() {
   }, [id])
 
   // Rating pemilik dan status simpan (kalau belum login, hasilnya kosong saja)
+  const itemId = item?.id
+  const ownerId = item?.owner?.id
   useEffect(() => {
-    if (!item) return
+    if (!itemId) return
     let batal = false
-    getProfile(item.owner?.id).then(({ data }) => {
+    getProfile(ownerId).then(({ data }) => {
       if (!batal) setProfil(data?.profile ?? null)
     })
     getMyWishlist().then(({ data }) => {
-      if (!batal) setSaved(!!data?.some((i) => i.id === item.id))
+      if (!batal) setSaved(!!data?.some((i) => i.id === itemId))
     })
     return () => {
       batal = true
     }
-  }, [item?.id])
+  }, [itemId, ownerId])
 
   async function simpan() {
     const res = await toggleWishlist(item.id)

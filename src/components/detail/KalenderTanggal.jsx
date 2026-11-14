@@ -1,31 +1,13 @@
 import { useState } from 'react'
 import Icon from '../ui/Icon'
+import { iso } from '../../lib/tanggal'
 
 const HARI = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
 const BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
 
-// Tanggal lokal jadi teks "YYYY-MM-DD"
-export function iso(d) {
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const t = String(d.getDate()).padStart(2, '0')
-  return `${d.getFullYear()}-${m}-${t}`
-}
-
-// Semua tanggal dari start sampai end, termasuk kedua ujung
-export function tanggalDalamRentang(start, end = start) {
-  const [y, m, d] = start.split('-').map(Number)
-  const hasil = []
-  for (let i = 0; i < 400; i++) {
-    const t = iso(new Date(y, m - 1, d + i))
-    hasil.push(t)
-    if (t >= end) break
-  }
-  return hasil
-}
-
 // terpakai: Set tanggal yang sudah dipesan. mulai/selesai: tanggal terpilih ("YYYY-MM-DD" atau null).
 export default function KalenderTanggal({ terpakai, mulai, selesai, onPilih }) {
-  const sekarang = new Date()
+  const [sekarang] = useState(() => new Date())
   const hariIni = iso(sekarang)
   const [tampil, setTampil] = useState({ y: sekarang.getFullYear(), m: sekarang.getMonth() })
   const { y, m } = tampil
