@@ -7,6 +7,7 @@ import DetailBarang from './pages/DetailBarang'
 import Placeholder, { NotFound } from './pages/Placeholder'
 import Styleguide from './pages/Styleguide'
 import BackendTest from './dev/BackendTest'
+import Beranda from './pages/Beranda'
 
 // Daftar halaman. Halaman yang masih Placeholder diganti oleh pemilik modulnya
 // (lihat pembagian tugas di blueprint): C = Beranda, Katalog, Detail; D = Masuk, Pasang Barang; A = Cara Kerja.
@@ -14,7 +15,7 @@ export default function App() {
   return (
     <Routes>
       <Route element={<AppShell />}>
-        <Route index element={<Placeholder title="Beranda" owner="C" buddy="kamera" />} />
+        <Route index element={<Beranda />} />
         <Route path="katalog" element={<Katalog />} />
         <Route path="barang/:id" element={<DetailBarang />} />
         <Route path="pasang" element={<Placeholder title="Pasang Barang" owner="D" buddy="charger" />} />
