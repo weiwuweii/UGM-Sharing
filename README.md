@@ -10,10 +10,10 @@ Karya Kompetisi Web Design COMMIT 2026 · Tema: Optimasi Keuangan dan Gaya Hidup
 
 | Anggota | Peran | Tugas |
 | --- | --- | --- |
-| Beverly Marsya Yufuai | A · Product Lead, QA, dokumen | Survei pengguna, konten aplikasi, QA, laporan, dan presentasi |
-| Aulia Dwi Novita | B · UI/UX, front-end, dan perbaikan database | Desain Figma, design system, halaman akun dan dashboard, data contoh, dan perbaikan database |
-| Almira Raisya Nadhifah | C · Front-end katalog | Beranda, Katalog, Detail Barang, dan Ajukan Pinjam |
-| Balqis Isma Nadhifa | D · Fullstack dan infrastruktur | Database Supabase, Auth, API, dan deploy |
+| Beverly Marsya Yufuai | Product Lead, QA, dokumen | Survei pengguna, konten aplikasi, QA, laporan, dan presentasi |
+| Aulia Dwi Novita | UI/UX, front-end, dan perbaikan database | Desain Figma, design system, halaman akun dan dashboard, data contoh, dan perbaikan database |
+| Almira Raisya Nadhifah | Front-end katalog | Beranda, Katalog, Detail Barang, dan Ajukan Pinjam |
+| Balqis Isma Nadhifa | Fullstack dan infrastruktur | Database Supabase, Auth, API, dan deploy |
 
 ## Tentang
 
@@ -67,10 +67,11 @@ Perintah lain: `npm run build` untuk build produksi, `npm run lint` untuk cek ko
 ## Tautan
 
 - Website: https://ugm-sharing.vercel.app
-- Desain Figma: `[isi link Figma]`
+- Desain Figma: https://www.figma.com/design/FYf25CXB2DotmJEx3fEGbv/UGM-Sharing-%E2%80%94-Design--COMMIT-2026-?node-id=25-43&t=AOKqz8YuRbadCrWZ-1
 - Akun demo untuk juri:
   - Pemilik barang: `demo.pemilik@mail.ugm.ac.id` / `DemoJuri123!`
   - Peminjam: `demo.peminjam@mail.ugm.ac.id` / `DemoJuri123!`
+  - Cara mencoba: masuk sebagai peminjam, buka profil "demo.pemilik" (atau barang miliknya), ajukan pinjam, lalu masuk sebagai pemilik untuk menyetujui di Dashboard.
 
 ## Arsitektur teknis dan back-end
 
@@ -93,7 +94,7 @@ Folder `supabase/`:
 
 ## Penggunaan AI, template, dan aset pihak ketiga
 
-- **AI:** Claude (Anthropic) dipakai untuk membantu menyusun rencana proyek, desain UI di Figma, penulisan komponen dan halaman front-end, data contoh, serta dokumentasi. `[tambahkan AI lain yang dipakai anggota, jika ada]`. Seluruh kode ditinjau, diuji, dan dipahami oleh anggota tim.
+- **AI:** Claude (Anthropic) dipakai untuk membantu menyusun rencana proyek, desain UI di Figma, penulisan komponen dan halaman front-end, data contoh, serta dokumentasi. Seluruh kode ditinjau, diuji, dan dipahami oleh anggota tim.
 - **Template atau starter code:** template bawaan Vite (`npm create vite`) sebagai kerangka awal.
 - **Font:** [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans) dari Google Fonts, lisensi SIL Open Font License.
 - **Ikon:** bentuk ikon mengikuti [Lucide](https://lucide.dev), lisensi ISC.
