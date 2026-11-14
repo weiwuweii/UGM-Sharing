@@ -1,26 +1,8 @@
-import Button from '../ui/Button'
 import Field from '../ui/Field'
+import { KATEGORI, KONDISI as PILIHAN_KONDISI, LOKASI } from '../../content/pilihan'
 
-// PENTING: 'value' harus PERSIS sama dengan isi database (getItems memakai pencocokan persis).
-// Ganti sesuai hasil "select distinct" dari D.
-const KATEGORI = [
-  { value: 'kalkulator', label: 'Kalkulator' },
-  { value: 'kamera', label: 'Kamera' },
-  { value: 'charger', label: 'Charger' },
-  { value: 'jas lab', label: 'Jas Lab' },
-]
-const LOKASI = [
-  { value: 'FMIPA', label: 'FMIPA' },
-  { value: 'Teknik', label: 'Teknik' },
-  { value: 'Sekip', label: 'Sekip' },
-]
-const KONDISI = [
-  { value: '', label: 'Semua kondisi' },
-  { value: 'baru', label: 'Baru' },
-  { value: 'seperti_baru', label: 'Seperti baru' },
-  { value: 'baik', label: 'Baik' },
-  { value: 'layak_pakai', label: 'Layak pakai' },
-]
+// Pilihan diambil dari src/content/pilihan.js (sama dengan Pasang Barang dan data contoh).
+const KONDISI = [{ value: '', label: 'Semua kondisi' }, ...PILIHAN_KONDISI]
 
 function Judul({ children }) {
   return <h3 className="mb-2 text-base font-bold">{children}</h3>
