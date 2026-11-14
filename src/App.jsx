@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import AppShell from './components/layout/AppShell'
+import CaraKerja from './pages/CaraKerja'
 import Dashboard from './pages/Dashboard'
 import Katalog from './pages/Katalog'
 import Placeholder, { NotFound } from './pages/Placeholder'
@@ -19,7 +20,7 @@ export default function App() {
         <Route path="masuk" element={<Placeholder title="Masuk / Daftar" owner="D" />} />
         <Route path="profil" element={<Placeholder title="Profil" />} />
         <Route path="profil/:id" element={<Placeholder title="Profil Publik" />} />
-        <Route path="cara-kerja" element={<Placeholder title="Cara Kerja" owner="A" buddy="jaslab" />} />
+        <Route path="cara-kerja" element={<CaraKerja />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="styleguide" element={<Styleguide />} />
         <Route path="*" element={<NotFound />} />
