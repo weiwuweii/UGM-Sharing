@@ -16,3 +16,12 @@ export async function getStats() {
   if (error) return { data: null, error: error.message }
   return { data, error: null }
 }
+// Jumlah mahasiswa yang sudah punya akun (akun demo juri tidak dihitung)
+export async function getJumlahPengguna() {
+  const { count, error } = await supabase
+    .from('profiles')
+    .select('id', { count: 'exact', head: true })
+    .not('full_name', 'ilike', 'demo%')
+  if (error) return { data: null, error: error.message }
+  return { data: count ?? 0, error: null }
+}

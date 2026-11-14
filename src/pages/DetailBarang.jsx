@@ -139,7 +139,7 @@ export default function DetailBarang() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-[1200px] px-5 pt-6 pb-28 md:px-6 md:py-10">
+      <div className="mx-auto max-w-[1200px] px-5 pt-6 pb-10 md:px-6 md:py-10">
         <Memuat />
       </div>
     )
@@ -147,7 +147,7 @@ export default function DetailBarang() {
 
   if (error || !item) {
     return (
-      <div className="mx-auto max-w-[1200px] px-5 pt-6 pb-28 md:px-6 md:py-10">
+      <div className="mx-auto max-w-[1200px] px-5 pt-6 pb-10 md:px-6 md:py-10">
         <EmptyState title="Barang tidak ditemukan" action={<Button variant="secondary" to="/katalog">Ke katalog</Button>}>
           Barang ini mungkin sudah dihapus atau linknya salah.
         </EmptyState>
@@ -173,7 +173,7 @@ export default function DetailBarang() {
   const kategori = item.category ? item.category[0].toUpperCase() + item.category.slice(1) : ''
 
   return (
-    <div className="mx-auto max-w-[1200px] px-5 pt-5 pb-28 md:px-6 md:py-8">
+    <div className="mx-auto max-w-[1200px] px-5 pt-5 pb-10 md:px-6 md:py-8">
       <nav aria-label="Navigasi" className="mb-4 hidden text-sm text-ink-2 lg:block">
         <Link to="/katalog" className="hover:underline">Katalog</Link>
         {kategori && (

@@ -178,7 +178,7 @@ export default function Katalog() {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-[1200px] gap-6 px-5 pt-5 pb-28 md:px-6 md:py-8 lg:grid-cols-[280px_1fr] lg:gap-8">
+      <div className="mx-auto grid max-w-[1200px] gap-6 px-5 pt-5 pb-10 md:px-6 md:py-8 lg:grid-cols-[280px_1fr] lg:gap-8">
         <aside className="hidden h-fit rounded-card bg-surface p-5 shadow-card lg:block">{panel}</aside>
 
         <section className="min-w-0">

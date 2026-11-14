@@ -127,7 +127,7 @@ export default function Masuk() {
 
 function Kartu({ children }) {
   return (
-    <div className="bg-hero -mb-28 flex min-h-dvh items-start justify-center px-5 pt-10 pb-36 md:mb-0 md:min-h-[calc(100dvh-76px)] md:items-center md:pb-10">
+    <div className="bg-hero flex min-h-[calc(100dvh-76px)] items-start justify-center px-5 py-10 md:items-center">
       <div className="flex w-full max-w-md flex-col items-center gap-5 rounded-sheet bg-surface p-6 text-center shadow-float md:p-8">
         {children}
       </div>

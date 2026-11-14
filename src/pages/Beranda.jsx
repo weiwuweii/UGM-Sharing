@@ -4,21 +4,17 @@ import Buddy from '../components/buddy/Buddy'
 import { BUDDY_TINT, buddyForCategory } from '../components/buddy/buddyMap'
 import ItemCard, { ItemCardSkeleton } from '../components/items/ItemCard'
 import Icon from '../components/ui/Icon'
-import { getItems, getStats } from '../lib/api'
+import { getItems, getJumlahPengguna, getStats } from '../lib/api'
 import { rupiahRingkas } from '../lib/format'
 import { useWishlist } from '../lib/useWishlist'
 import { KATEGORI as PILIHAN_KATEGORI } from '../content/pilihan'
-import { rupiah } from '../lib/format'
 
+// Sesuai desain Figma: 4 kategori utama + "Lainnya" (gabungan kategori sisanya).
 // Kategori diambil dari src/content/pilihan.js (sama dengan Katalog dan Pasang Barang).
-const KATEGORI = PILIHAN_KATEGORI.map((k) => ({ ...k, buddy: buddyForCategory(k.value) }))
-const SEMUA = { value: '', label: 'Semua', buddy: 'violet' }
-
-const LANGKAH = [
-  { judul: 'Cari barang', teks: 'Temukan barang dari sesama mahasiswa di dekat fakultasmu.', icon: 'search' },
-  { judul: 'Ajukan pinjam', teks: 'Pilih tanggal dan lihat hematnya dibanding beli baru.', icon: 'calendar' },
-  { judul: 'Ketemuan dan pakai', teks: 'Setelah disetujui, chat pemilik lewat WhatsApp untuk serah terima.', icon: 'chat' },
-]
+const UTAMA = ['kalkulator', 'kamera', 'charger', 'jas lab']
+const KATEGORI = PILIHAN_KATEGORI.filter((k) => UTAMA.includes(k.value)).map((k) => ({ ...k, buddy: buddyForCategory(k.value) }))
+const LAINNYA = PILIHAN_KATEGORI.filter((k) => !UTAMA.includes(k.value))
+const KARTU_KATEGORI = [...KATEGORI, { value: '', label: 'Lainnya', buddy: 'violet' }]
 
 export default function Beranda() {
   const navigate = useNavigate()
@@ -27,6 +23,7 @@ export default function Beranda() {
   const [stats, setStats] = useState(null)
   const [terbaru, setTerbaru] = useState(null) // null = sedang memuat
   const [jumlah, setJumlah] = useState({})
+  const [pengguna, setPengguna] = useState(null)
 
   useEffect(() => {
     let batal = false
@@ -34,11 +31,18 @@ export default function Beranda() {
       if (!batal) setStats(data)
     })
     getItems({ sort: 'terbaru' }).then(({ data }) => {
-      if (!batal) setTerbaru((data ?? []).slice(0, 8))
+      if (!batal) setTerbaru((data ?? []).slice(0, 4))
     })
-    // Jumlah barang per kategori (total dari API)
-    Promise.all(KATEGORI.map((k) => getItems({ category: k.value }))).then((hasil) => {
-      if (!batal) setJumlah(Object.fromEntries(KATEGORI.map((k, i) => [k.value, hasil[i].total])))
+    getJumlahPengguna().then(({ data }) => {
+      if (!batal) setPengguna(data)
+    })
+    // Jumlah barang per kategori (total dari API); "Lainnya" = jumlah kategori sisanya
+    const semua = [...KATEGORI, ...LAINNYA]
+    Promise.all(semua.map((k) => getItems({ category: k.value }))).then((hasil) => {
+      if (batal) return
+      const per = Object.fromEntries(semua.map((k, i) => [k.value, hasil[i].total ?? 0]))
+      per[''] = LAINNYA.reduce((n, k) => n + per[k.value], 0)
+      setJumlah(per)
     })
     return () => {
       batal = true
@@ -52,10 +56,10 @@ export default function Beranda() {
   }
 
   return (
-    <div className="pb-28 md:pb-12">
+    <div className="pb-12 md:pb-16">
       {/* Hero */}
       <section className="bg-hero text-on-dark">
-        <div className="mx-auto grid max-w-[1200px] items-center gap-6 px-5 py-8 md:grid-cols-[1.1fr_1fr] md:px-6 md:py-16">
+        <div className="mx-auto grid max-w-[1200px] items-center gap-6 px-5 py-8 md:grid-cols-[1.1fr_1fr] md:px-6 md:py-14">
           <div>
             <p className="mb-4 inline-block rounded-full bg-lime-400 px-3 py-1 text-xs font-semibold text-navy-900">
               Platform pinjam dan beli antarmahasiswa UGM
@@ -110,27 +114,12 @@ export default function Beranda() {
             </div>
           </div>
 
-          <div className="relative hidden h-[400px] md:block" aria-hidden="true">
-            <div className="absolute -top-2 -left-2 rotate-[-8deg]"><Buddy type="kamera" size={110} /></div>
-            <div className="absolute top-0 right-4 rotate-[6deg]"><Buddy type="kalkulator" size={120} /></div>
-            <div className="absolute bottom-6 left-0 rotate-[4deg]"><Buddy type="jaslab" size={110} /></div>
-            <div className="absolute right-0 bottom-0 rotate-[-6deg]"><Buddy type="charger" size={120} /></div>
-
-            {/* Kartu contoh Kalkulator Hemat */}
-            <div className="absolute top-[54%] left-1/2 w-[290px] -translate-x-1/2 -translate-y-1/2 rounded-card bg-surface p-5 text-ink shadow-float">
-              <div className="flex items-center gap-3">
-                <span className="flex size-12 items-center justify-center rounded-field bg-tint-blue"><Buddy type="kalkulator" size={36} /></span>
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold">Kalkulator Casio fx-991</p>
-                  <p className="text-xs text-ink-2">Pinjam 3 hari · FMIPA</p>
-                </div>
-              </div>
-              <dl className="mt-4 flex flex-col gap-1.5 text-sm">
-                <div className="flex justify-between"><dt className="text-ink-2">Beli baru</dt><dd className="tabular line-through decoration-ink-2/60">{rupiah(265000)}</dd></div>
-                <div className="flex justify-between"><dt className="text-ink-2">Pinjam 3 hari</dt><dd className="tabular font-semibold">{rupiah(24000)}</dd></div>
-              </dl>
-              <p className="mt-3 rounded-field bg-lime-400 px-3 py-2 text-center text-sm font-bold text-navy-900">Kamu hemat {rupiah(241000)}</p>
-            </div>
+          {/* Maskot berserakan seperti di Figma */}
+          <div className="relative hidden h-[420px] md:block" aria-hidden="true">
+            <div className="absolute top-0 left-[18%] rotate-[-6deg]"><Buddy type="kamera" size={230} /></div>
+            <div className="absolute top-[18%] -right-6 rotate-[5deg]"><Buddy type="kalkulator" size={180} /></div>
+            <div className="absolute bottom-0 left-0 rotate-[-4deg]"><Buddy type="charger" size={135} /></div>
+            <div className="absolute right-[6%] bottom-[2%]"><Buddy type="violet" size={108} /></div>
           </div>
         </div>
       </section>
@@ -141,8 +130,8 @@ export default function Beranda() {
           <h2 id="judul-kategori" className="mb-4 text-xl font-bold md:text-2xl">Jelajahi kategori</h2>
 
           {/* HP: deretan lingkaran */}
-          <div className="flex gap-4 overflow-x-auto pb-1 md:hidden">
-            {[...KATEGORI, SEMUA].map((k) => (
+          <div className="-mx-5 flex gap-4 overflow-x-auto px-5 pb-1 md:hidden">
+            {KARTU_KATEGORI.map((k) => (
               <Link
                 key={k.label}
                 to={k.value ? `/katalog?category=${encodeURIComponent(k.value)}` : '/katalog'}
@@ -156,21 +145,21 @@ export default function Beranda() {
             ))}
           </div>
 
-          {/* Desktop: kartu */}
-          <div className="hidden grid-cols-4 gap-4 md:grid">
-            {[...KATEGORI, SEMUA].map((k) => (
+          {/* Desktop: 5 kartu sebaris */}
+          <div className="hidden grid-cols-5 gap-5 md:grid">
+            {KARTU_KATEGORI.map((k) => (
               <Link
                 key={k.label}
                 to={k.value ? `/katalog?category=${encodeURIComponent(k.value)}` : '/katalog'}
-                className="flex items-center gap-3 rounded-card bg-surface p-4 shadow-card transition hover:-translate-y-0.5 hover:shadow-float"
+                className="flex items-center gap-3.5 rounded-card bg-surface p-4 shadow-card transition hover:-translate-y-0.5 hover:shadow-float"
               >
-                <span className={`flex size-12 shrink-0 items-center justify-center rounded-full ${BUDDY_TINT[k.buddy]}`}>
-                  <Buddy type={k.buddy} size={32} />
+                <span className={`flex size-16 shrink-0 items-center justify-center rounded-field ${BUDDY_TINT[k.buddy]}`}>
+                  <Buddy type={k.buddy} size={46} />
                 </span>
                 <span className="min-w-0">
-                  <span className="block truncate text-sm font-semibold">{k.label}</span>
+                  <span className="block truncate font-semibold">{k.label}</span>
                   <span className="block text-xs text-ink-2">
-                    {k.value ? (jumlah[k.value] !== undefined ? `${jumlah[k.value]} barang` : '...') : 'Semua barang'}
+                    {jumlah[k.value] !== undefined ? `${jumlah[k.value]} barang` : '...'}
                   </span>
                 </span>
               </Link>
@@ -181,26 +170,21 @@ export default function Beranda() {
         {/* Total hemat komunitas */}
         <section
           aria-label="Statistik komunitas"
-          className="relative grid gap-4 overflow-hidden rounded-card bg-lime-400 p-5 text-navy-900 md:grid-cols-[1.4fr_1fr_1fr_auto] md:items-center md:gap-8 md:px-8 md:py-7"
+          className="relative grid gap-4 overflow-hidden rounded-card bg-lime-400 p-5 text-navy-900 md:flex md:items-center md:gap-14 md:px-9 md:py-6"
         >
           <div className="pr-20 md:pr-0">
             <p className="text-sm font-medium">Total hemat komunitas</p>
             <p className="tabular text-3xl font-extrabold md:text-4xl">
               {stats ? rupiahRingkas(stats.total_saved_community) : '...'}
             </p>
-            <p className="text-xs">dibanding beli baru, dari transaksi yang sudah selesai</p>
+            <p className="text-xs">Dihitung dari transaksi yang sudah selesai</p>
           </div>
-          <div className="flex gap-8 md:contents">
-            <div className="md:border-l md:border-navy-900/15 md:pl-8">
-              <p className="tabular text-2xl font-bold md:text-3xl">{stats ? stats.total_items : '...'}</p>
-              <p className="text-xs">barang tersedia</p>
-            </div>
-            <div className="md:border-l md:border-navy-900/15 md:pl-8">
-              <p className="tabular text-2xl font-bold md:text-3xl">{stats ? stats.completed_transactions : '...'}</p>
-              <p className="text-xs">transaksi selesai</p>
-            </div>
+          <div className="grid grid-cols-3 gap-3 md:ml-auto md:flex md:gap-14">
+            <Angka nilai={stats?.total_items} label="barang tersedia" />
+            <Angka nilai={stats?.completed_transactions} label="transaksi selesai" />
+            <Angka nilai={pengguna} label="mahasiswa bergabung" />
           </div>
-          <div className="absolute top-5 right-5 md:static"><Buddy type="violet" size={64} /></div>
+          <div className="absolute top-5 right-5 md:static"><Buddy type="violet" size={72} /></div>
         </section>
 
         {/* Baru ditambahkan */}
@@ -212,11 +196,8 @@ export default function Beranda() {
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-6">
             {terbaru === null
               ? Array.from({ length: 4 }).map((_, i) => <ItemCardSkeleton key={i} />)
-              : terbaru.map((item, i) => (
-                  // HP cukup 4 barang, desktop 8 barang (2 baris)
-                  <div key={item.id} className={i >= 4 ? 'hidden md:grid' : 'grid'}>
-                    <ItemCard item={item} saved={ids.has(item.id)} onToggleSaved={toggle} />
-                  </div>
+              : terbaru.map((item) => (
+                  <ItemCard key={item.id} item={item} saved={ids.has(item.id)} onToggleSaved={toggle} />
                 ))}
           </div>
           {terbaru !== null && terbaru.length === 0 && (
@@ -224,42 +205,16 @@ export default function Beranda() {
           )}
         </section>
 
-        {/* Cara kerja singkat */}
-        <section aria-labelledby="judul-cara">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 id="judul-cara" className="text-xl font-bold md:text-2xl">Pinjam dalam 3 langkah</h2>
-            <Link to="/cara-kerja" className="text-sm font-semibold text-navy-500 hover:underline">Aturan main</Link>
-          </div>
-          <ol className="grid gap-3 md:grid-cols-3 md:gap-6">
-            {LANGKAH.map((l, i) => (
-              <li key={l.judul} className="flex gap-4 rounded-card bg-surface p-5 shadow-card">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-navy-700 text-lime-400">
-                  <Icon name={l.icon} />
-                </span>
-                <div>
-                  <p className="text-xs font-semibold text-navy-500">Langkah {i + 1}</p>
-                  <h3 className="font-bold">{l.judul}</h3>
-                  <p className="mt-1 text-sm text-ink-2">{l.teks}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        {/* Ajakan untuk pemilik barang */}
-        <section className="bg-hero relative flex flex-col items-start gap-4 overflow-hidden rounded-sheet p-6 text-on-dark md:flex-row md:items-center md:justify-between md:p-10">
-          <div className="max-w-lg">
-            <h2 className="text-2xl font-bold md:text-3xl">Punya barang yang jarang dipakai?</h2>
-            <p className="mt-2 text-on-dark-2">Pasang di UGM Sharing dan biarkan barangmu menghasilkan uang saku, sambil membantu teman hemat.</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link to="/pasang" className="inline-flex h-12 items-center gap-2 rounded-full bg-lime-400 px-6 text-sm font-semibold text-navy-900 transition hover:brightness-95">
-              Pasang Barang <Icon name="arrowRight" size={18} />
-            </Link>
-            <Buddy type="charger" size={90} className="hidden md:block" />
-          </div>
-        </section>
       </div>
+    </div>
+  )
+}
+
+function Angka({ nilai, label }) {
+  return (
+    <div>
+      <p className="tabular text-2xl font-bold md:text-3xl">{nilai ?? '...'}</p>
+      <p className="text-xs">{label}</p>
     </div>
   )
 }

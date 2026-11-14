@@ -21,9 +21,10 @@ export default function AppShell() {
         Langsung ke konten
       </a>
       <DesktopNav />
-      <main id="konten" className="pb-28 md:pb-0">
+      <main id="konten">
         <Outlet />
       </main>
+      <Footer />
       <BottomNav />
     </div>
   )
@@ -113,5 +114,43 @@ function BottomNav() {
         {item(LINKS[3])}
       </div>
     </nav>
+  )
+}
+
+const KOLOM_FOOTER = [
+  { judul: 'Jelajah', link: [['Katalog', '/katalog'], ['Cara Kerja', '/cara-kerja']] },
+  { judul: 'Akun', link: [['Masuk', '/masuk'], ['Dashboard', '/dashboard']] },
+  { judul: 'Bantuan', link: [['Barang dilarang', '/cara-kerja#aturan'], ['Lapor barang', '/cara-kerja#aturan']] },
+]
+
+// Footer sesuai desain Figma (Beranda Desktop)
+function Footer() {
+  return (
+    <footer className="bg-navy-900 text-on-dark">
+      <div className="mx-auto grid max-w-[1200px] gap-8 px-5 pt-10 pb-32 md:grid-cols-[1fr_auto] md:gap-12 md:px-6 md:pt-11 md:pb-10">
+        <div>
+          <Link to="/" className="inline-flex items-center gap-3">
+            <Buddy type="violet" size={44} />
+            <span className="text-2xl font-bold">UGM Sharing</span>
+          </Link>
+          <p className="mt-3 text-sm text-on-dark-2">Pinjam dulu, beli kalau perlu.</p>
+        </div>
+        <nav aria-label="Tautan footer" className="grid grid-cols-3 gap-6 md:gap-24">
+          {KOLOM_FOOTER.map((k) => (
+            <div key={k.judul}>
+              <p className="font-semibold">{k.judul}</p>
+              <ul className="mt-2 flex flex-col gap-1.5 text-sm text-on-dark-2">
+                {k.link.map(([label, to]) => (
+                  <li key={label}><Link to={to} className="hover:text-on-dark hover:underline">{label}</Link></li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+        <p className="text-xs text-on-dark-2 md:col-span-2">
+          Karya COMMIT 2026 Web Design. Bukan layanan resmi Universitas Gadjah Mada.
+        </p>
+      </div>
+    </footer>
   )
 }
