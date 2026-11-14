@@ -16,6 +16,11 @@ const URUTAN = [
   { value: 'termurah', label: 'Urutkan: Termurah' },
   { value: 'termahal', label: 'Urutkan: Termahal' },
 ]
+const CHIP_TIPE = [
+  { value: '', label: 'Semua' },
+  { value: 'pinjam', label: 'Pinjam' },
+  { value: 'jual', label: 'Beli' },
+]
 
 function Pagination({ page, pages, onChange }) {
   const mulai = Math.max(1, Math.min(page - 2, pages - 4))
@@ -68,8 +73,8 @@ export default function Katalog() {
     page: Number(params.get('page') || 1),
   }
   const adaFilter = [...params.keys()].some((k) => k !== 'sort' && k !== 'page')
+  const adaFilterLain = [...params.keys()].some((k) => !['sort', 'page', 'search'].includes(k))
 
-  // Ubah satu filter di URL (pakai versi "fungsi" supaya beberapa perubahan berturut-turut tidak saling menimpa)
   function ubah(nama, nilai) {
     setParams((sebelum) => {
       const baru = new URLSearchParams(sebelum)
@@ -80,6 +85,7 @@ export default function Katalog() {
     })
   }
 
+  // Hapus semuanya (termasuk kata kunci)
   function reset() {
     setCari('')
     setMin('')
@@ -87,7 +93,13 @@ export default function Katalog() {
     setParams({})
   }
 
-  // Debounce pencarian: tunggu 400 ms setelah berhenti mengetik
+  // Hapus filter saja, kata kunci pencarian dipertahankan
+  function resetFilter() {
+    setMin('')
+    setMax('')
+    setParams(cari.trim() ? { search: cari.trim() } : {})
+  }
+
   useEffect(() => {
     const t = setTimeout(() => {
       if (cari.trim() !== (params.get('search') || '')) ubah('search', cari.trim())
@@ -112,19 +124,23 @@ export default function Katalog() {
 
   const jumlahHalaman = Math.max(1, Math.ceil(total / PAGE_SIZE))
   const panel = (
-    <FilterPanel filters={filters} ubah={ubah} harga={{ min, max, setMin, setMax }} onReset={reset} />
+    <FilterPanel filters={filters} ubah={ubah} harga={{ min, max, setMin, setMax }} onReset={resetFilter} />
   )
 
   return (
     <div>
-      {/* Header: judul di kiri, kolom cari melebar di tengah, maskot di kanan */}
       <header className="bg-hero text-on-dark">
         <div className="mx-auto flex max-w-[1200px] flex-col gap-4 px-5 py-6 md:flex-row md:items-center md:gap-8 md:px-6 md:py-10">
-          <div className="shrink-0">
-            <h1 className="text-2xl font-bold md:text-[40px] md:leading-tight">Katalog</h1>
-            <p className="text-sm text-on-dark-2 md:text-base">
-              {loading ? 'Memuat...' : `${total} barang tersedia`}
-            </p>
+          <div className="flex shrink-0 items-start justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-bold md:text-[40px] md:leading-tight">Katalog</h1>
+              <p className="text-sm text-on-dark-2 md:text-base">
+                {loading ? 'Memuat...' : `${total} barang ${adaFilter ? 'ditemukan' : 'tersedia'}`}
+              </p>
+            </div>
+            <div className="md:hidden">
+              <Buddy type="kalkulator" size={56} />
+            </div>
           </div>
 
           <div className="relative w-full md:flex-1">
@@ -137,8 +153,16 @@ export default function Katalog() {
               onChange={(e) => setCari(e.target.value)}
               placeholder="Cari barang..."
               aria-label="Cari barang"
-              className="h-14 w-full rounded-full bg-surface pr-5 pl-14 text-base text-ink focus:outline-none"
+              className="h-14 w-full rounded-full bg-surface pr-16 pl-14 text-base text-ink focus:outline-none lg:pr-5"
             />
+            <button
+              type="button"
+              aria-label="Buka filter"
+              onClick={() => setLaciBuka(true)}
+              className="absolute top-1/2 right-2 inline-flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-lime-400 text-navy-900 transition active:scale-95 lg:hidden"
+            >
+              <Icon name="sliders" size={18} />
+            </button>
           </div>
 
           <div className="hidden shrink-0 md:block">
@@ -147,30 +171,36 @@ export default function Katalog() {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-[1200px] gap-6 px-5 pt-6 pb-28 md:px-6 md:py-8 lg:grid-cols-[280px_1fr] lg:gap-8">
+      <div className="mx-auto grid max-w-[1200px] gap-6 px-5 pt-5 pb-28 md:px-6 md:py-8 lg:grid-cols-[280px_1fr] lg:gap-8">
         <aside className="hidden h-fit rounded-card bg-surface p-5 shadow-card lg:block">{panel}</aside>
 
         <section className="min-w-0">
+          {/* Chip tipe untuk HP */}
+          <div className="mb-4 flex gap-2 overflow-x-auto lg:hidden" role="group" aria-label="Tipe">
+            {CHIP_TIPE.map((c) => (
+              <button
+                key={c.value}
+                type="button"
+                aria-pressed={filters.type === c.value}
+                onClick={() => ubah('type', c.value)}
+                className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition ${
+                  filters.type === c.value ? 'bg-navy-700 text-on-dark' : 'bg-surface text-ink ring-1 ring-line'
+                }`}
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
+
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-ink-2">
               {loading ? 'Memuat...' : `Menampilkan ${items.length} dari ${total} barang`}
             </p>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="secondary"
-                size="sm"
-                className="lg:hidden"
-                icon={<Icon name="sliders" size={16} />}
-                onClick={() => setLaciBuka(true)}
-              >
-                Filter
-              </Button>
-              <Field as="select" aria-label="Urutkan" value={filters.sort} onChange={(e) => ubah('sort', e.target.value)}>
-                {URUTAN.map((u) => (
-                  <option key={u.value} value={u.value}>{u.label}</option>
-                ))}
-              </Field>
-            </div>
+            <Field as="select" aria-label="Urutkan" value={filters.sort} onChange={(e) => ubah('sort', e.target.value)}>
+              {URUTAN.map((u) => (
+                <option key={u.value} value={u.value}>{u.label}</option>
+              ))}
+            </Field>
           </div>
 
           {loading ? (
@@ -183,10 +213,17 @@ export default function Katalog() {
             <ErrorState message={error} onRetry={() => setUlang((n) => n + 1)} />
           ) : items.length === 0 ? (
             <EmptyState
-              title="Barang tidak ditemukan"
-              action={adaFilter && <Button variant="secondary" onClick={reset}>Hapus filter</Button>}
+              title={filters.search ? `Belum ada "${filters.search}"` : 'Barang tidak ditemukan'}
+              action={
+                adaFilter && (
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {adaFilterLain && <Button variant="secondary" onClick={resetFilter}>Reset filter</Button>}
+                    <Button onClick={reset}>Lihat semua</Button>
+                  </div>
+                )
+              }
             >
-              Coba kata kunci atau filter yang lain.
+              Coba kata lain, misalnya "kamera", atau longgarkan filter harga dan kondisi.
             </EmptyState>
           ) : (
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6">
@@ -202,7 +239,6 @@ export default function Katalog() {
         </section>
       </div>
 
-      {/* Laci filter untuk HP */}
       <Sheet
         open={laciBuka}
         onClose={() => setLaciBuka(false)}
