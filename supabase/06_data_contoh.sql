@@ -54,7 +54,7 @@ with pemilik as (
 insert into public.items
   (owner_id, title, description, category, listing_type, retail_price, rent_price_per_day, sale_price, deposit, condition, location, photos, status, created_at)
 select p.id, d.title, d.description, d.category, d.listing_type, d.retail_price, d.rent_price_per_day, d.sale_price, d.deposit,
-       d.condition, d.location, array[d.foto], d.status, now() - make_interval(hours => d.idx * 5)
+       d.condition, d.location, array[d.foto], d.status, now() - make_interval(hours => ((d.idx * 13) % 40) * 5)
 from data d
 join pemilik p on p.n = d.idx % (select c from jumlah)
 where not exists (select 1 from public.items i where i.title = d.title);
