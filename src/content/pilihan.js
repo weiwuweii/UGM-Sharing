@@ -12,12 +12,15 @@ export const KATEGORI = [
 ]
 
 export const LOKASI = [
-  { value: 'FMIPA', label: 'FMIPA' },
-  { value: 'Teknik', label: 'Teknik' },
-  { value: 'Sekip', label: 'Sekip' },
-  { value: 'FEB', label: 'FEB' },
   { value: 'Bulaksumur', label: 'Bulaksumur' },
   { value: 'Perpustakaan Pusat', label: 'Perpustakaan Pusat' },
+  { value: 'FMIPA', label: 'FMIPA' },
+  { value: 'Teknik', label: 'Teknik' },
+  { value: 'FEB', label: 'FEB' },
+  { value: 'Karangmalang', label: 'Karangmalang' },
+  { value: 'Sagan', label: 'Sagan' },
+  { value: 'Pogung', label: 'Pogung' },
+  { value: 'Klebengan', label: 'Klebengan' },
 ]
 
 export const KONDISI = [
