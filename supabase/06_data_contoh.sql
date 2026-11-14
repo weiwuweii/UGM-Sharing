@@ -5,7 +5,10 @@
 -- Gambar ada di folder public/barang/ (ilustrasi SVG, ikut ter-deploy bersama website).
 
 with pemilik as (
-  select id, (row_number() over (order by created_at) - 1)::int as n from public.profiles
+  select p.id, (row_number() over (order by p.created_at) - 1)::int as n
+  from public.profiles p
+  join auth.users u on u.id = p.id
+  where u.email <> 'demo.peminjam@mail.ugm.ac.id'
 ), jumlah as (
   select count(*)::int as c from pemilik
 ), data (idx, title, description, category, listing_type, retail_price, rent_price_per_day, sale_price, deposit, condition, location, foto, status) as (
