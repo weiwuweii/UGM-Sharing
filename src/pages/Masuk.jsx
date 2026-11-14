@@ -101,7 +101,7 @@ export default function Masuk() {
 
       <form onSubmit={kirim} noValidate className="flex w-full flex-col gap-4 text-left">
         {mode === 'daftar' && (
-          <Field label="Nama lengkap" autoComplete="name" value={form.nama} onChange={ubah('nama')} error={errors.nama} placeholder="Contoh: Hilmiya Fathma" />
+          <Field label="Nama lengkap" autoComplete="name" value={form.nama} onChange={ubah('nama')} error={errors.nama} placeholder="Contoh: Kageyama Tobio" />
         )}
         <Field label="Email UGM" type="email" inputMode="email" autoComplete="email" value={form.email} onChange={ubah('email')} error={errors.email} placeholder="nama@mail.ugm.ac.id" />
         <Field
