@@ -1,7 +1,10 @@
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Buddy from '../buddy/Buddy'
 import Button from '../ui/Button'
 import Icon from '../ui/Icon'
+import { useToast } from '../ui/toast'
+import { signOut } from '../../lib/api'
+import { useSession } from '../../lib/useSession'
 
 const LINKS = [
   { to: '/', label: 'Beranda', icon: 'home', end: true },
@@ -49,11 +52,35 @@ function DesktopNav() {
           ))}
         </ul>
         <div className="flex items-center gap-5">
-          <Link to="/masuk" className="text-sm font-semibold text-navy-700 hover:underline">Masuk</Link>
+          <AkunMenu />
           <Button to="/pasang">Pasang Barang</Button>
         </div>
       </nav>
     </header>
+  )
+}
+
+// Di navbar desktop: tombol Masuk kalau belum login, atau Profil + Keluar kalau sudah.
+function AkunMenu() {
+  const { user, loading } = useSession()
+  const navigate = useNavigate()
+  const toast = useToast()
+  if (loading) return <span className="w-16" aria-hidden="true" />
+  if (!user) return <Link to="/masuk" className="text-sm font-semibold text-navy-700 hover:underline">Masuk</Link>
+
+  async function keluar() {
+    await signOut()
+    toast('Kamu sudah keluar')
+    navigate('/')
+  }
+  return (
+    <div className="flex items-center gap-4">
+      <Link to="/profil" className="flex items-center gap-2 text-sm font-semibold text-navy-700 hover:underline">
+        <span className="inline-flex size-8 items-center justify-center rounded-full bg-tint-blue"><Icon name="user" size={16} /></span>
+        Profil
+      </Link>
+      <button type="button" onClick={keluar} className="text-sm font-medium text-ink-2 hover:text-ink">Keluar</button>
+    </div>
   )
 }
 

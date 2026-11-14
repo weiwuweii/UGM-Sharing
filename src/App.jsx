@@ -6,8 +6,11 @@ import Katalog from './pages/Katalog'
 import DetailBarang from './pages/DetailBarang'
 import Placeholder, { NotFound } from './pages/Placeholder'
 import Styleguide from './pages/Styleguide'
-import BackendTest from './dev/BackendTest'
 import Beranda from './pages/Beranda'
+import Masuk from './pages/Masuk'
+import PasangBarang from './pages/PasangBarang'
+import ProfilSaya from './pages/ProfilSaya'
+import Tersimpan from './pages/Tersimpan'
 
 // Daftar halaman. Halaman yang masih Placeholder diganti oleh pemilik modulnya
 // (lihat pembagian tugas di blueprint): C = Beranda, Katalog, Detail; D = Masuk, Pasang Barang; A = Cara Kerja.
@@ -18,17 +21,16 @@ export default function App() {
         <Route index element={<Beranda />} />
         <Route path="katalog" element={<Katalog />} />
         <Route path="barang/:id" element={<DetailBarang />} />
-        <Route path="pasang" element={<Placeholder title="Pasang Barang" owner="D" buddy="charger" />} />
-        <Route path="masuk" element={<Placeholder title="Masuk / Daftar" owner="D" />} />
-        <Route path="profil" element={<Placeholder title="Profil" />} />
+        <Route path="pasang" element={<PasangBarang />} />
+        <Route path="masuk" element={<Masuk />} />
+        <Route path="profil" element={<ProfilSaya />} />
+        <Route path="tersimpan" element={<Tersimpan />} />
         <Route path="profil/:id" element={<Placeholder title="Profil Publik" />} />
         <Route path="cara-kerja" element={<CaraKerja />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="styleguide" element={<Styleguide />} />
         <Route path="*" element={<NotFound />} />
       </Route>
-      {/* Halaman tes backend lama, di luar layout */}
-      <Route path="tes-backend" element={<BackendTest />} />
     </Routes>
   )
 }
