@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import AppShell from './components/layout/AppShell'
 import Dashboard from './pages/Dashboard'
 import Katalog from './pages/Katalog'
+import DetailBarang from './pages/DetailBarang'
 import Placeholder, { NotFound } from './pages/Placeholder'
 import Styleguide from './pages/Styleguide'
 import BackendTest from './dev/BackendTest'
@@ -14,7 +15,7 @@ export default function App() {
       <Route element={<AppShell />}>
         <Route index element={<Placeholder title="Beranda" owner="C" buddy="kamera" />} />
         <Route path="katalog" element={<Katalog />} />
-        <Route path="barang/:id" element={<Placeholder title="Detail Barang" owner="C" buddy="kalkulator" />} />
+        <Route path="barang/:id" element={<DetailBarang />} />
         <Route path="pasang" element={<Placeholder title="Pasang Barang" owner="D" buddy="charger" />} />
         <Route path="masuk" element={<Placeholder title="Masuk / Daftar" owner="D" />} />
         <Route path="profil" element={<Placeholder title="Profil" />} />
