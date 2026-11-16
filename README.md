@@ -94,11 +94,19 @@ Folder `supabase/`:
 
 ## Penggunaan AI, template, dan aset pihak ketiga
 
-- **AI:** Claude (Anthropic) dipakai untuk membantu menyusun rencana proyek, desain UI di Figma, penulisan komponen dan halaman front-end, data contoh, serta dokumentasi. Seluruh kode ditinjau, diuji, dan dipahami oleh anggota tim.
-- **Template atau starter code:** template bawaan Vite (`npm create vite`) sebagai kerangka awal.
-- **Font:** [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans) dari Google Fonts, lisensi SIL Open Font License.
-- **Ikon:** bentuk ikon mengikuti [Lucide](https://lucide.dev), lisensi ISC.
-- **Ilustrasi maskot Buddy dan ilustrasi barang:** dibuat sendiri oleh tim.
+**AI: Claude (Anthropic) dan Gemini (Google).** Proyek dikerjakan dengan bantuan AI. Tim tetap menentukan ide, fitur, alur, dan arah desain, lalu meninjau, menguji, dan merevisi hasilnya. Bagian yang dibantu:
+
+- **Perencanaan:** pembagian tugas, timeline, dan rincian fitur.
+- **Desain UI/UX:** layar di Figma, design system, dan maskot Buddy beserta mata yang mengikuti kursor, berdasarkan referensi visual yang dipilih tim.
+- **Front-end:** komponen dan halaman React (Beranda, Katalog, Detail, Dashboard, Masuk/Daftar, Pasang Barang, Profil, Cara Kerja).
+- **Back-end dan database:** penulisan kueri kompleks untuk kebijakan Row Level Security (RLS) dan fungsi Remote Procedure Call (RPC) di PostgreSQL, optimasi integrasi API di `src/lib/api/`, serta debugging selama penyambungan ke Supabase.
+- **Konten dan data:** teks aplikasi, aturan, FAQ, data dummy untuk pengujian alur transaksi, 40 barang contoh, dan ilustrasi barang (`public/barang/`).
+
+**Template atau starter code:** template bawaan Vite (`npm create vite`) sebagai kerangka awal.
+
+**Aset pihak ketiga:**
+- Font [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans) dari Google Fonts, lisensi SIL Open Font License.
+- Bentuk ikon mengikuti [Lucide](https://lucide.dev), lisensi ISC.
 
 ## Keterbatasan
 
